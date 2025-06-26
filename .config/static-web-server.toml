@@ -1,0 +1,53 @@
+[general]
+# Replit上でサーバーを公開するための設定
+host = "0.0.0.0"
+port = 80
+
+# 公開するファイルの場所（このReplitのプロジェクトの中身すべて）
+root = "./"
+
+# 表示しないログのレベル（"error"ならエラーだけ表示）
+log-level = "error"
+log-remote-address = false
+
+# フォルダの中身を一覧表示するか（falseで表示しない）
+directory-listing = false
+
+# キャッシュ（古い情報を保存しないようにする）
+cache-control-headers = false
+
+# 他のサイトからのアクセスを許可（A-Frameなどで読み込む時に必要）
+cors-allow-origins = "*"
+
+# 「index.html」がトップページとして開かれるようにする
+index-files = "index.html"
+
+# 隠しファイルや特殊なファイルをブロック
+ignore-hidden-files = true
+disable-symlinks = true
+
+# MIMEタイプの追加定義（GLTFやNFTマーカー用）
+mime-types = [
+  { extension = "glb",   type = "model/gltf-binary" },
+  { extension = "gltf",  type = "model/gltf+json" },
+  { extension = "fset",  type = "application/octet-stream" },
+  { extension = "fset3", type = "application/octet-stream" },
+  { extension = "iset",  type = "application/octet-stream" }
+]
+
+[advanced]
+
+# すべてのファイルにキャッシュを無効化
+[[advanced.headers]]
+source = "**"
+[advanced.headers.headers]
+Cache-Control = "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0"
+Pragma = "no-cache"
+Expires = "0"
+
+# /assets/ 以下に対して特別なCORSとContent-Type設定を追加
+[[advanced.headers]]
+source = "/assets/*"
+[advanced.headers.headers]
+Access-Control-Allow-Origin = "*"
+Content-Type = "application/octet-stream"
