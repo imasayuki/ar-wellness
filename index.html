@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>AR NFT Template</title>
+
+    <!-- A-Frame 本体 -->
+    <script src="https://aframe.io/releases/1.7.0/aframe.min.js"></script>
+
+    <!-- AR.js（NFTマーカー対応版） ※CDN読み込みが不安定なためローカル配置 -->
+    <script src="./libs/aframe-ar-nft.js"></script>
+
+    <!-- ローディング用のスタイル -->
+    <style>
+      body { margin: 0; overflow: hidden; }
+      a-scene {
+        position: absolute;
+        top: 0; left: 0;
+        width: 100vw; height: 100vh;
+      }
+      .arjs-loader {
+        position: absolute;
+        top: 0; left: 0;
+        width: 100vw; height: 100vh;
+        background: black;
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 1.2em;
+        z-index: 9999;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- 読み込み中に表示されるローダー -->
+    <div class="arjs-loader">読み込み中...</div>
+
+    <!-- ARマーカー検出＆表示部分 -->
+    <a-scene
+      vr-mode-ui="enabled: false"
+      embedded
+      renderer="logarithmicDepthBuffer: true"
+      arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;"
+    >
+      <a-nft
+        type="nft"
+        url="./assets/N-box"
+        emitevents="true"
+        smooth="true"
+        smoothcount="15"
+        smoothtolerance="0.02"
+        smooththreshold="4"
+        id="nft-marker"
+      >
+        <a-box position="50 0 -150" color="blue" scale="50 50 50"></a-box>
+      </a-nft>
+
+      <a-entity camera></a-entity>
+    </a-scene>
+
+    <!-- デバッグ用スクリプト -->
+    <script>
+      console.log("ページ読み込み完了");
+
+      // AR.js 読み込み完了時
+      window.addEventListener("arjs-nft-loaded", () => {
+        console.log("NFT マーカーのデスクリプタ読み込み完了");
+        const loader = document.querySelector('.arjs-loader');
+        if (loader) loader.style.display = 'none';
+      });
+
+      // マーカー検出ログ
+      const marker = document.querySelector("#nft-marker");
+      marker.addEventListener("markerFound", () => {
+        console.log("NFT マーカーが見つかりました");
+      });
+
+      marker.addEventListener("markerLost", () => {
+        console.log("NFT マーカーを見失いました");
+      });
+    </script>
+  </body>
+</html>
